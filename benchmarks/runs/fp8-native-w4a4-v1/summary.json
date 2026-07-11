@@ -1,0 +1,59 @@
+{
+  "status": "PASS_NATIVE_FP8_BASELINE",
+  "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+  "model_revision": "491c2f1ea524c639598bf8fa787a93fed5a6fbce",
+  "image_id": "sha256:a072794deee4b7875f4cbc40fb189a674188d7f7a10f32bf45038527c9485cfa",
+  "profile": {
+    "KV_CACHE_DTYPE": "fp8",
+    "QUANTIZATION": "modelopt_mixed",
+    "MOE_BACKEND": "flashinfer_b12x",
+    "LINEAR_BACKEND": "flashinfer_cutlass",
+    "SPECULATIVE_CONFIG": "{\"method\":\"mtp\",\"num_speculative_tokens\":2,\"moe_backend\":\"triton\"}",
+    "MAX_MODEL_LEN": "65536",
+    "MAX_NUM_SEQS": "32",
+    "MAX_NUM_BATCHED_TOKENS": "32768",
+    "GPU_MEMORY_UTILIZATION": "0.88",
+    "ATTENTION_BACKEND": "flashinfer",
+    "LANGUAGE_MODEL_ONLY": "1"
+  },
+  "effective_moe_backend": "FLASHINFER_B12X",
+  "kv_cache_tokens": 5739315,
+  "mtp_draft_tokens_total": 5526.0,
+  "mtp_accepted_tokens_total": 4252.0,
+  "mtp_acceptance_rate": 0.7694534925805284,
+  "native_marker_gate": {
+    "modelopt_mixed": true,
+    "fp8_dense": true,
+    "nvfp4_dense": true,
+    "w4a16_native_reroute": true,
+    "target_moe_native": true,
+    "flashinfer_attention": true,
+    "effective_piecewise": true,
+    "mtp_configured": true
+  },
+  "w4a16_input_scale_audit_passed": true,
+  "semantic_gate_passed": true,
+  "semantic_checks": {
+    "model_exact": true,
+    "arithmetic_437": true,
+    "exact_string": true,
+    "word_problem_54": true,
+    "code_shape": true,
+    "repeat_deterministic": true,
+    "repeat_exact": true,
+    "all_http_200": true,
+    "no_empty_loop_or_template_leakage": true
+  },
+  "long_generation_passed": true,
+  "long_generation_checks": {
+    "arithmetic_437": true,
+    "long_content_present": true,
+    "word_problem_420": true,
+    "all_finished_stop": true
+  },
+  "long_generation_completion_tokens": 2212,
+  "long_generation_elapsed_seconds": 24.12747607496567,
+  "long_generation_aggregate_tokens_per_second": 91.67970960274374,
+  "nvfp4_kv_decision": "NOT_ADOPTED_SM121_KNOWN_SCALE_WRITE_QUALITY_BLOCKER_FP8_REMAINS_BASELINE",
+  "forbidden_runtime_markers": []
+}

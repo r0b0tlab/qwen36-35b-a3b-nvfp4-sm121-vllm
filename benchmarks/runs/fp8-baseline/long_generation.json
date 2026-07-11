@@ -1,0 +1,93 @@
+{
+  "generated_at_utc": "2026-07-10T20:38:25.221515+00:00",
+  "model": "Qwen3.6-35B-A3B-NVFP4",
+  "base_url": "http://127.0.0.1:18080",
+  "tests": [
+    {
+      "name": "arithmetic_mtp_smoke",
+      "request": {
+        "model": "Qwen3.6-35B-A3B-NVFP4",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Compute 19 * 23 and give the exact answer."
+          }
+        ],
+        "temperature": 0,
+        "top_p": 1,
+        "max_tokens": 256,
+        "stream": false
+      },
+      "http_status": 200,
+      "elapsed_s": 2.5557682900107466,
+      "finish_reason": "length",
+      "usage": {
+        "prompt_tokens": 24,
+        "total_tokens": 280,
+        "completion_tokens": 256,
+        "prompt_tokens_details": null
+      },
+      "content": null,
+      "reasoning": "Thinking Process:\n\n1.  **Identify the user's request:** The user wants to compute the product of 19 and 23 and wants the exact answer.\n2.  **Perform the multiplication:**\n    *   Method 1: Standard algorithm\n        *   $19 \\times 23$\n        *   $19 \\times 3 = 57$\n        *   $19 \\times 20 = 380$\n        *   $380 + 57 = 437$\n    *   Method 2: Difference of squares (mental math trick)\n        *   $19 = 21 - 2$\n        *   $23 = 21 + 2$\n        *   $(21 - 2)(21 + 2) = 21^2 - 2^2$\n        *   $21^2 = 441$\n        *   $2^2 = 4$\n        *   $441 - 4 = 437$\n    *   Method 3: Distributive property\n        *   $1",
+      "response_error": null
+    },
+    {
+      "name": "long_generation",
+      "request": {
+        "model": "Qwen3.6-35B-A3B-NVFP4",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Write a detailed technical explanation of how grouped NVFP4 weight-only quantization differs from FP8 KV-cache quantization. Include headings, equations in plain text, and practical trade-offs. Aim for a sustained answer of roughly 700 words."
+          }
+        ],
+        "temperature": 0,
+        "top_p": 1,
+        "max_tokens": 1024,
+        "stream": false
+      },
+      "http_status": 200,
+      "elapsed_s": 11.525569765013643,
+      "finish_reason": "length",
+      "usage": {
+        "prompt_tokens": 60,
+        "total_tokens": 1084,
+        "completion_tokens": 1024,
+        "prompt_tokens_details": null
+      },
+      "content": null,
+      "reasoning": "Here's a thinking process:\n\n1.  **Understand User Request:**\n   - **Topic:** Grouped NVFP4 weight-only quantization vs. FP8 KV-cache quantization\n   - **Requirements:** \n     - Detailed technical explanation\n     - Include headings\n     - Include equations in plain text\n     - Include practical trade-offs\n     - Aim for ~700 words\n   - **Key Concepts to Cover:**\n     - NVFP4 (NVIDIA FP4) weight-only quantization, specifically grouped variant\n     - FP8 KV-cache quantization\n     - Differences in architecture, computation, memory, precision, grouping strategy, activation vs. weight handling, hardware support, etc.\n     - Equations in plain text format\n     - Practical trade-offs (performance, memory, accuracy, latency, hardware compatibility)\n\n2.  **Deconstruct the Topics:**\n   - **NVFP4 Weight-Only Quantization (Grouped):**\n     - Quantizes model weights to 4-bit floating point (FP4)\n     - \"Grouped\" means quantization parameters (scale/offset) are computed per group of weights rather than per tensor/channel\n     - Weight-only means activations remain in higher precision (typically FP16/BF16)\n     - NVFP4 is NVIDIA's specific FP4 format (likely 1-2-1 or similar: 1 sign, 2 exponent, 1 mantissa, or similar to bfloat4/float4 variants)\n     - Equation: W_quant = round(W / s) + z, where s is scale, z is zero-point, computed per group\n     - Inverse: W_recon = (W_quant - z) * s\n     - Grouping reduces quantization error by allowing local adaptation of scale/zero-point\n\n   - **FP8 KV-cache Quantization:**\n     - KV-cache stores key and value tensors from previous tokens during autoregressive generation\n     - Quantized to FP8 (typically E4M3 or E5M2)\n     - This is activation/cache quantization, not weight quantization\n     - FP8 has 8 bits, higher precision than FP4\n     - Equation: K_quant = round(K / s_k) + z_k, V_quant = round(V / s_v) + z_v\n     - During inference, dequantized or computed in mixed precision\n     - Trade-off: saves memory/bandwidth for KV-cache, but may introduce attention accuracy loss\n\n3.  **Structure the Response:**\n   - Introduction\n   - NVFP4 Grouped Weight-Only Quantization: Technical Mechanics\n   - FP8 KV-Cache Quantization: Technical Mechanics\n   - Core Architectural and Computational Differences\n   - Practical Trade-offs\n   - Conclusion\n   - Ensure ~700 words, plain text equations, headings, technical depth.\n\n4.  **Draft - Section by Section (Mental Refinement):**\n   *(Introduction)* Briefly set context: LLM inference optimization, quantization strategies, weight vs. cache, precision levels.\n\n   *(NVFP4 Grouped Weight-Only Quantization)* Explain NVFP4 format, grouped strategy, weight-only nature. Provide equation. Explain how grouping works (e.g., 32 or 64 weights per group share scale/zero-point). Mention that activations stay high precision, so compute happens in FP16/BF16 with FP4 weights dequantized on-the-fly or via specialized tensor cores.\n\n   *(FP8 KV-Cache Quantization)* Explain KV-cache role, why quantize it, FP8 format (E4M3/E5M2), how scales are computed per layer or per token sequence. Equation for quantization/dequantization. Note that this is activation/cache quantization, not weight quantization.\n\n   *(Core Differences)* Compare: precision (4-bit vs 8-bit), what's quantized (weights vs cache), grouping impact, compute flow, hardware support (NVIDIA Hopper/Blackwell tensor cores for FP4 vs FP8), memory bandwidth vs compute trade-offs.\n\n   *(Practical Trade-offs)* Accuracy vs memory, latency, hardware requirements, calibration needs, deployment complexity, use cases (prefill vs decode, long context, etc.)\n\n   *(Conclusion)* Summarize key distinction: weight compression vs cache optimization, complementary vs competing, future directions.\n\n5.  **Write Content (Mental to Text, aiming for ~700 words):**\n   I'll draft carefully, counting words roughly, ensuring technical accuracy, plain text equations, headings, and trade-offs.\n\n   *(Self-Correction/Verification during drafting)*\n   - NVFP4: NVIDIA's FP4 is typically 1-2-1 (1 sign, 2 exponent, 1 mantissa) or similar. I'll describe it generally as a 4-bit floating point format with explicit scale",
+      "response_error": null
+    },
+    {
+      "name": "reasoning_stability",
+      "request": {
+        "model": "Qwen3.6-35B-A3B-NVFP4",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Solve this carefully: A warehouse has 19 pallets with 23 boxes on each pallet. If 17 boxes are damaged, how many good boxes remain? Show the reasoning and final integer."
+          }
+        ],
+        "temperature": 0,
+        "top_p": 1,
+        "max_tokens": 512,
+        "stream": false
+      },
+      "http_status": 200,
+      "elapsed_s": 4.913887084054295,
+      "finish_reason": "length",
+      "usage": {
+        "prompt_tokens": 53,
+        "total_tokens": 565,
+        "completion_tokens": 512,
+        "prompt_tokens_details": null
+      },
+      "content": null,
+      "reasoning": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - Warehouse has 19 pallets\n   - Each pallet has 23 boxes\n   - 17 boxes are damaged\n   - Question: How many good boxes remain?\n   - Requirements: Show reasoning and final integer.\n\n2.  **Identify Key Information & Operations:**\n   - Total boxes = (number of pallets) \u00d7 (boxes per pallet) = 19 \u00d7 23\n   - Damaged boxes = 17\n   - Good boxes = Total boxes - Damaged boxes\n   - Need to calculate 19 \u00d7 23 first, then subtract 17.\n\n3.  **Perform Calculations:**\n   - 19 \u00d7 23:\n     - 20 \u00d7 23 = 460\n     - Subtract 1 \u00d7 23 = 23\n     - 460 - 23 = 437\n     - Alternatively: 19 \u00d7 23 = (20 - 1) \u00d7 23 = 460 - 23 = 437\n   - Total boxes = 437\n   - Good boxes = 437 - 17 = 420\n\n4.  **Verify Calculation:**\n   - 19 \u00d7 23:\n     - 9 \u00d7 3 = 27\n     - 10 \u00d7 23 = 230\n     - 9 \u00d7 23 = 207\n     - 230 + 207 = 437. Correct.\n   - 437 - 17 = 420. Correct.\n\n5.  **Structure Response:**\n   - State the steps clearly.\n   - Show multiplication for total boxes.\n   - Show subtraction for good boxes.\n   - Provide final integer as requested.\n   - Keep it concise and careful.\n\n   Draft:\n   First, calculate the total number of boxes: 19 pallets \u00d7 23 boxes/pallet = 437 boxes.\n   Next, subtract the damaged boxes: 437 total boxes - 17 damaged boxes = 420 good boxes.\n   Final answer: 420.\n\n6.  **Check Against Requirements",
+      "response_error": null
+    }
+  ],
+  "all_http_200": true,
+  "all_nonempty": true
+}

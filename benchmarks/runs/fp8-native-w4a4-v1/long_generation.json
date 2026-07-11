@@ -1,0 +1,109 @@
+{
+  "generated_at_utc": "2026-07-10T22:42:53.348375+00:00",
+  "model": "Qwen3.6-35B-A3B-NVFP4",
+  "base_url": "http://127.0.0.1:18080",
+  "tests": [
+    {
+      "name": "arithmetic_mtp_smoke",
+      "request": {
+        "model": "Qwen3.6-35B-A3B-NVFP4",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Compute 19 * 23 and give the exact answer."
+          }
+        ],
+        "temperature": 0,
+        "top_p": 1,
+        "max_tokens": 512,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "stream": false
+      },
+      "http_status": 200,
+      "elapsed_s": 2.1977556470083073,
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 251,
+        "completion_tokens": 225,
+        "prompt_tokens_details": null
+      },
+      "content": "To compute $19 \\times 23$, we can use the distributive property or standard multiplication.\n\n**Method 1: Distributive Property**\nWe can break down 19 into $(20 - 1)$:\n$$ 19 \\times 23 = (20 - 1) \\times 23 $$\n$$ = (20 \\times 23) - (1 \\times 23) $$\n$$ = 460 - 23 $$\n$$ = 437 $$\n\n**Method 2: Standard Multiplication**\n$$\n\\begin{array}{r@{\\quad}l}\n  23 \\\\\n\\times 19 \\\\\n\\hline\n 207 & (9 \\times 23) \\\\\n 230 & (10 \\times 23) \\\\\n\\hline\n 437 & (207 + 230)\n\\end{array}\n$$\n\n**Answer:**\n437",
+      "reasoning": null,
+      "response_error": null
+    },
+    {
+      "name": "long_generation",
+      "request": {
+        "model": "Qwen3.6-35B-A3B-NVFP4",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Write a detailed technical explanation of how grouped NVFP4 weight-only quantization differs from FP8 KV-cache quantization. Include headings, equations in plain text, and practical trade-offs. Aim for a sustained answer of roughly 700 words."
+          }
+        ],
+        "temperature": 0,
+        "top_p": 1,
+        "max_tokens": 2048,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "stream": false
+      },
+      "http_status": 200,
+      "elapsed_s": 16.02437017398188,
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 62,
+        "total_tokens": 1428,
+        "completion_tokens": 1366,
+        "prompt_tokens_details": null
+      },
+      "content": "# Technical Comparison: Grouped NVFP4 Weight-Only Quantization vs. FP8 KV-Cache Quantization\n\nIn the evolution of Large Language Model (LLM) inference, memory bandwidth and capacity have become the primary bottlenecks. To address this, the industry has adopted two distinct but complementary quantization strategies: Grouped NVFP4 weight-only quantization and FP8 KV-cache quantization. While both aim to reduce memory footprint, they operate on different data structures, utilize different mathematical approximations, and present unique trade-offs regarding hardware utilization and accuracy preservation.\n\n## Grouped NVFP4 Weight-Only Quantization\n\nNVFP4 (NVIDIA FP4) is a specialized 4-bit floating-point format designed specifically for efficient matrix multiplication in tensor cores. Unlike standard INT4 quantization, which maps floating-point values to integers, NVFP4 retains a floating-point exponent and mantissa structure, allowing for a wider dynamic range than fixed-point formats. However, storing a full exponent for every single weight is inefficient. Therefore, NVFP4 employs a \"weight-only\" quantization scheme where the weights of the neural network are compressed into 4-bit values, while activations and intermediate states remain in higher precision (typically FP16 or BF16) during computation.\n\nThe \"Grouped\" aspect is critical for maintaining accuracy. In naive per-tensor quantization, a single scaling factor is applied to an entire matrix, which often fails to capture the distribution of weights in layers with heavy tails. Grouped quantization divides the weight matrix into smaller blocks or groups. For each group, a separate scaling factor and zero-point are calculated. This allows the quantization process to adapt to local variations in weight distribution, significantly reducing quantization error.\n\nMathematically, the quantization process for a weight $W$ in a specific group can be expressed as:\n\nQ(W) = round( (W - Z) / S )\n\nWhere $Q(W)$ is the quantized 4-bit value, $Z$ is the zero-point, and $S$ is the scale factor specific to that group. The dequantization for computation is then:\n\nW_reconstructed = Q(W) * S + Z\n\nBecause NVFP4 is a floating-point format, the \"scale\" is often integrated into the exponent bits, allowing for hardware-level normalization. This approach drastically reduces the memory footprint of the model weights by a factor of four compared to FP16, enabling larger models to fit into GPU memory or allowing for higher batch sizes. However, it requires specialized hardware support to decode the 4-bit floats and perform mixed-precision arithmetic efficiently.\n\n## FP8 KV-Cache Quantization\n\nWhile weight quantization reduces the static model size, the Key-Value (KV) cache represents a dynamic memory bottleneck that grows linearly with sequence length. In attention mechanisms, the KV cache stores the keys and values for all previous tokens to avoid recomputation. For long-context applications, this cache can consume more memory than the model weights themselves.\n\nFP8 KV-cache quantization addresses this by storing the KV cache tensors in 8-bit floating-point format (specifically E4M3 or E5M2 variants) instead of the standard FP16 or BF16. FP8 offers a significant increase in precision over INT8 while maintaining a much smaller footprint than FP16. The primary advantage here is not just memory reduction, but the preservation of numerical stability in the attention scores.\n\nThe quantization of the KV cache involves scaling the FP16 key and value tensors to fit within the dynamic range of FP8. This is typically done using a per-channel or per-tensor scaling factor. The equation for quantizing a key tensor $K$ is similar to the weight quantization:\n\nK_fp8 = round( K_fp16 / S_k )\n\nWhere $S_k$ is the scale factor for the keys. The critical difference lies in the computation. During the attention forward pass, the FP8 KV cache is dequantized on-the-fly or used in mixed-precision GEMM (General Matrix Multiply) operations supported by modern tensor cores (such as NVIDIA\u2019s Hopper and Blackwell architectures). This allows the model to maintain high accuracy in attention mechanisms, which are sensitive to numerical precision, while still achieving a 2x memory reduction compared to FP16 KV caches.\n\n## Practical Trade-offs and Hardware Implications\n\nThe choice between these two methods depends on the specific constraints of the deployment environment.\n\n**Memory vs. Compute:**\nNVFP4 weight-only quantization offers the most aggressive memory reduction for the model parameters (4x reduction from FP16). This is crucial for fitting massive models (e.g., 70B+ parameters) onto single GPUs. However, it shifts the computational burden to the tensor cores, which must perform complex dequantization and mixed-precision multiplication. If the hardware does not have native NVFP4 support, the overhead can negate the memory benefits.\n\nFP8 KV-cache quantization, by contrast, offers a more modest 2x memory reduction but is generally easier to implement on existing hardware that supports FP8 GEMM operations. It is particularly beneficial for long-context inference where the KV cache dominates memory usage. The trade-off here is that FP8 still requires more memory than INT4 or NVFP4 weights, but it preserves the accuracy of the attention mechanism better than lower-bit formats.\n\n**Accuracy and Stability:**\nNVFP4 is highly effective for linear layers (weights) but can introduce artifacts in non-linear layers if not carefully calibrated. The grouped approach mitigates this, but accuracy degradation is still a concern for very low-bit quantization. FP8, being a higher precision format, introduces minimal accuracy loss in the KV cache, making it a safer choice for maintaining model performance in long-context scenarios.\n\n**Hardware Support:**\nNVFP4 requires specialized tensor core support (e.g., NVIDIA H100/H200 with specific compute capabilities). FP8 is more widely supported across newer GPU architectures. For organizations with older hardware, FP8 KV-cache quantization may be the only viable path to memory optimization, whereas NVFP4 is reserved for cutting-edge hardware deployments.\n\nIn summary, grouped NVFP4 weight-only quantization is a strategy for maximizing model density and fitting larger models into memory, while FP8 KV-cache quantization is a targeted optimization for managing dynamic memory growth in long-context inference. The optimal solution often involves combining both: using NVFP4 for weights to minimize static memory and FP8 for the KV cache to manage dynamic memory, thereby achieving the highest possible throughput and context length on modern AI accelerators.",
+      "reasoning": null,
+      "response_error": null
+    },
+    {
+      "name": "reasoning_stability",
+      "request": {
+        "model": "Qwen3.6-35B-A3B-NVFP4",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Solve this carefully: A warehouse has 19 pallets with 23 boxes on each pallet. If 17 boxes are damaged, how many good boxes remain? Show the reasoning and final integer."
+          }
+        ],
+        "temperature": 0,
+        "top_p": 1,
+        "max_tokens": 2048,
+        "chat_template_kwargs": {
+          "enable_thinking": true
+        },
+        "stream": false
+      },
+      "http_status": 200,
+      "elapsed_s": 5.9053502539754845,
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 53,
+        "total_tokens": 674,
+        "completion_tokens": 621,
+        "prompt_tokens_details": null
+      },
+      "content": "\n\n**Reasoning:**\n1. Find the total number of boxes initially:  \n   19 pallets \u00d7 23 boxes per pallet = 437 boxes.\n2. Subtract the damaged boxes from the total to find the good ones:  \n   437 total boxes \u2212 17 damaged boxes = 420 good boxes.\n\n**Final integer:** 420",
+      "reasoning": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - Warehouse has 19 pallets\n   - Each pallet has 23 boxes\n   - 17 boxes are damaged\n   - Question: How many good boxes remain?\n   - Requirements: Show reasoning and final integer.\n\n2.  **Identify Key Mathematical Operations:**\n   - Total boxes initially = (number of pallets) \u00d7 (boxes per pallet)\n   - Good boxes = Total boxes - Damaged boxes\n   - Need to perform multiplication and subtraction.\n\n3.  **Calculate Total Boxes:**\n   - 19 pallets \u00d7 23 boxes/pallet\n   - Let's compute: 19 \u00d7 23\n   - 19 \u00d7 20 = 380\n   - 19 \u00d7 3 = 57\n   - 380 + 57 = 437\n   - Alternatively: 20 \u00d7 23 = 460, minus 1 \u00d7 23 = 23 \u2192 460 - 23 = 437. Correct.\n\n4.  **Calculate Good Boxes:**\n   - Total boxes = 437\n   - Damaged = 17\n   - Good = 437 - 17 = 420\n\n5.  **Verify Reasoning:**\n   - 19 pallets \u00d7 23 boxes = 437 total boxes\n   - 437 total - 17 damaged = 420 good boxes\n   - Math checks out.\n   - No tricks or hidden complexities in the wording.\n\n6.  **Format Output:**\n   - Show step-by-step reasoning\n   - State final integer clearly\n   - Keep it concise as requested.\n\n   Draft:\n   First, calculate the total number of boxes: 19 pallets \u00d7 23 boxes per pallet = 437 boxes.\n   Next, subtract the damaged boxes from the total: 437 total boxes \u2212 17 damaged boxes = 420 good boxes.\n   Final answer: 420.\n\n7.  **Final Check:**\n   - 19 * 23 = 437 \u2713\n   - 437 - 17 = 420 \u2713\n   - Reasoning shown \u2713\n   - Final integer provided \u2713\n   - Matches request exactly. Ready.\u2705\n",
+      "response_error": null
+    }
+  ],
+  "all_http_200": true,
+  "all_nonempty": true,
+  "semantic_checks": {
+    "arithmetic_437": true,
+    "long_content_present": true,
+    "word_problem_420": true,
+    "all_finished_stop": true
+  },
+  "passed": true
+}

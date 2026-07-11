@@ -1,0 +1,45 @@
+{
+  "source": "http://127.0.0.1:18080/metrics",
+  "metrics": [
+    {
+      "series": "vllm:spec_decode_num_drafts_total{engine=\"0\",model_name=\"Qwen3.6-35B-A3B-NVFP4\"}",
+      "value": 769.0
+    },
+    {
+      "series": "vllm:spec_decode_num_draft_tokens_total{engine=\"0\",model_name=\"Qwen3.6-35B-A3B-NVFP4\"}",
+      "value": 1538.0
+    },
+    {
+      "series": "vllm:spec_decode_num_accepted_tokens_total{engine=\"0\",model_name=\"Qwen3.6-35B-A3B-NVFP4\"}",
+      "value": 1219.0
+    },
+    {
+      "series": "vllm:num_requests_running{engine=\"0\",model_name=\"Qwen3.6-35B-A3B-NVFP4\"}",
+      "value": 0.0
+    },
+    {
+      "series": "vllm:num_requests_waiting{engine=\"0\",model_name=\"Qwen3.6-35B-A3B-NVFP4\"}",
+      "value": 0.0
+    },
+    {
+      "series": "vllm:num_requests_waiting_by_reason{engine=\"0\",model_name=\"Qwen3.6-35B-A3B-NVFP4\",reason=\"capacity\"}",
+      "value": 0.0
+    },
+    {
+      "series": "vllm:num_requests_waiting_by_reason{engine=\"0\",model_name=\"Qwen3.6-35B-A3B-NVFP4\",reason=\"deferred\"}",
+      "value": 0.0
+    },
+    {
+      "series": "vllm:kv_cache_usage_perc{engine=\"0\",model_name=\"Qwen3.6-35B-A3B-NVFP4\"}",
+      "value": 0.0
+    },
+    {
+      "series": "vllm:prompt_tokens_total{engine=\"0\",model_name=\"Qwen3.6-35B-A3B-NVFP4\"}",
+      "value": 164.0
+    },
+    {
+      "series": "vllm:generation_tokens_total{engine=\"0\",model_name=\"Qwen3.6-35B-A3B-NVFP4\"}",
+      "value": 1988.0
+    }
+  ]
+}

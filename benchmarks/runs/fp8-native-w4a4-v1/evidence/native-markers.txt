@@ -1,0 +1,14 @@
+modelopt_mixed
+ModelOpt mixed
+ModelOpt NVFP4
+CutlassFP8ScaledMMLinearKernel
+FP8ScaledMMLinearKernel
+FlashInferCutlassNvFp4LinearKernel
+NvFp4LinearKernel
+R0B0TLAB_NATIVE_W4A4_FROM_W4A16
+Using 'FLASHINFER_B12X' NvFp4 MoE backend
+Using 'FLASHINFER_CUTEDSL' NvFp4 MoE backend
+Using 'FLASHINFER_CUTLASS' NvFp4 MoE backend
+Using 'FLASHINFER_CUTEDSL_BATCHED' NvFp4 MoE backend
+FLASHINFER attention backend
+FlashInfer attention

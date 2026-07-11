@@ -1,0 +1,19 @@
+{
+  "model_path": "/models/model",
+  "w4a16_targets": 161,
+  "routed_expert_aggregate_targets": 40,
+  "linear_targets": 121,
+  "linear_input_scales_loaded": 121,
+  "required_tensor_keys_missing": [],
+  "nonfinite_or_nonpositive_scales": [],
+  "scale_count": 121,
+  "scale_min": 0.004115513525903225,
+  "scale_max": 0.065476194024086,
+  "expected_contract": {
+    "w4a16_targets": 161,
+    "routed_expert_aggregate_targets": 40,
+    "linear_targets": 121,
+    "linear_input_scales_loaded": 121
+  },
+  "passed": true
+}

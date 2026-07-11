@@ -1,0 +1,215 @@
+{
+  "source": "telemetry.jsonl",
+  "phases": {
+    "concurrency-c1-rep1": {
+      "samples": 24,
+      "power_w_mean": 27.75166666666667,
+      "power_w_p95": 33.06,
+      "power_w_max": 34.6,
+      "gpu_util_pct_mean": 80.08333333333333,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 69.70833333333333,
+      "temperature_c_max": 73.0
+    },
+    "concurrency-c1-rep2": {
+      "samples": 25,
+      "power_w_mean": 27.9172,
+      "power_w_p95": 34.75,
+      "power_w_max": 35.19,
+      "gpu_util_pct_mean": 81.64,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 68.68,
+      "temperature_c_max": 73.0
+    },
+    "concurrency-c1-rep3": {
+      "samples": 24,
+      "power_w_mean": 27.465,
+      "power_w_p95": 33.6,
+      "power_w_max": 34.72,
+      "gpu_util_pct_mean": 81.33333333333333,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 68.33333333333333,
+      "temperature_c_max": 69.0
+    },
+    "concurrency-c16-rep1": {
+      "samples": 24,
+      "power_w_mean": 35.745,
+      "power_w_p95": 46.95,
+      "power_w_max": 50.69,
+      "gpu_util_pct_mean": 83.08333333333333,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 70.33333333333333,
+      "temperature_c_max": 73.0
+    },
+    "concurrency-c16-rep2": {
+      "samples": 24,
+      "power_w_mean": 34.5175,
+      "power_w_p95": 45.89,
+      "power_w_max": 47.78,
+      "gpu_util_pct_mean": 82.33333333333333,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 70.79166666666667,
+      "temperature_c_max": 74.0
+    },
+    "concurrency-c16-rep3": {
+      "samples": 24,
+      "power_w_mean": 35.695,
+      "power_w_p95": 47.48,
+      "power_w_max": 51.86,
+      "gpu_util_pct_mean": 82.33333333333333,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 71.625,
+      "temperature_c_max": 79.0
+    },
+    "concurrency-c2-rep1": {
+      "samples": 18,
+      "power_w_mean": 28.065,
+      "power_w_p95": 35.5,
+      "power_w_max": 35.52,
+      "gpu_util_pct_mean": 77.88888888888889,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 68.33333333333333,
+      "temperature_c_max": 72.0
+    },
+    "concurrency-c2-rep2": {
+      "samples": 17,
+      "power_w_mean": 27.88705882352941,
+      "power_w_p95": 35.65,
+      "power_w_max": 36.91,
+      "gpu_util_pct_mean": 76.52941176470588,
+      "gpu_util_pct_max": 93.0,
+      "temperature_c_mean": 68.05882352941177,
+      "temperature_c_max": 70.0
+    },
+    "concurrency-c2-rep3": {
+      "samples": 18,
+      "power_w_mean": 28.126666666666665,
+      "power_w_p95": 38.43,
+      "power_w_max": 41.4,
+      "gpu_util_pct_mean": 77.55555555555556,
+      "gpu_util_pct_max": 94.0,
+      "temperature_c_mean": 67.83333333333333,
+      "temperature_c_max": 71.0
+    },
+    "concurrency-c32-rep1": {
+      "samples": 43,
+      "power_w_mean": 35.845813953488374,
+      "power_w_p95": 48.54,
+      "power_w_max": 50.51,
+      "gpu_util_pct_mean": 75.11627906976744,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 72.6046511627907,
+      "temperature_c_max": 79.0
+    },
+    "concurrency-c32-rep2": {
+      "samples": 40,
+      "power_w_mean": 37.39025,
+      "power_w_p95": 50.33,
+      "power_w_max": 51.24,
+      "gpu_util_pct_mean": 82.775,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 72.275,
+      "temperature_c_max": 77.0
+    },
+    "concurrency-c32-rep3": {
+      "samples": 38,
+      "power_w_mean": 38.71815789473684,
+      "power_w_p95": 49.22,
+      "power_w_max": 50.22,
+      "gpu_util_pct_mean": 87.55263157894737,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 73.47368421052632,
+      "temperature_c_max": 76.0
+    },
+    "concurrency-c4-rep1": {
+      "samples": 13,
+      "power_w_mean": 29.136923076923075,
+      "power_w_p95": 36.07,
+      "power_w_max": 42.86,
+      "gpu_util_pct_mean": 79.84615384615384,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 67.61538461538461,
+      "temperature_c_max": 70.0
+    },
+    "concurrency-c4-rep2": {
+      "samples": 12,
+      "power_w_mean": 29.944166666666668,
+      "power_w_p95": 43.33,
+      "power_w_max": 48.91,
+      "gpu_util_pct_mean": 78.75,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 68.25,
+      "temperature_c_max": 72.0
+    },
+    "concurrency-c4-rep3": {
+      "samples": 13,
+      "power_w_mean": 28.966153846153848,
+      "power_w_p95": 36.17,
+      "power_w_max": 47.88,
+      "gpu_util_pct_mean": 79.76923076923077,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 67.84615384615384,
+      "temperature_c_max": 72.0
+    },
+    "concurrency-c8-rep1": {
+      "samples": 17,
+      "power_w_mean": 30.205882352941178,
+      "power_w_p95": 39.49,
+      "power_w_max": 44.71,
+      "gpu_util_pct_mean": 76.58823529411765,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 68.23529411764706,
+      "temperature_c_max": 72.0
+    },
+    "concurrency-c8-rep2": {
+      "samples": 17,
+      "power_w_mean": 31.761176470588236,
+      "power_w_p95": 42.2,
+      "power_w_max": 45.72,
+      "gpu_util_pct_mean": 82.17647058823529,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 69.17647058823529,
+      "temperature_c_max": 73.0
+    },
+    "concurrency-c8-rep3": {
+      "samples": 16,
+      "power_w_mean": 32.825,
+      "power_w_p95": 46.03,
+      "power_w_max": 50.01,
+      "gpu_util_pct_mean": 82.0625,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 69.25,
+      "temperature_c_max": 71.0
+    },
+    "finalize-release": {
+      "samples": 3,
+      "power_w_mean": 19.803333333333335,
+      "power_w_p95": 14.85,
+      "power_w_max": 30.27,
+      "gpu_util_pct_mean": 30.666666666666668,
+      "gpu_util_pct_max": 92.0,
+      "temperature_c_mean": 71.66666666666667,
+      "temperature_c_max": 74.0
+    },
+    "llama-benchy-depth-sweep": {
+      "samples": 23,
+      "power_w_mean": 41.377826086956524,
+      "power_w_p95": 61.78,
+      "power_w_max": 62.9,
+      "gpu_util_pct_mean": 90.95652173913044,
+      "gpu_util_pct_max": 96.0,
+      "temperature_c_mean": 74.8695652173913,
+      "temperature_c_max": 84.0
+    },
+    "preflight": {
+      "samples": 960,
+      "power_w_mean": 31.152895833333332,
+      "power_w_p95": 32.49,
+      "power_w_max": 38.46,
+      "gpu_util_pct_mean": 93.75520833333333,
+      "gpu_util_pct_max": 95.0,
+      "temperature_c_mean": 70.384375,
+      "temperature_c_max": 73.0
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "task": "gsm8k",
+  "num_fewshot": 0,
+  "sample_count": 1319,
+  "exact_match_flexible_extract": 0.8551933282789992,
+  "exact_match_flexible_extract_stderr": 0.009693234799052703,
+  "exact_match_strict_match": 0.0,
+  "exact_match_strict_match_stderr": 0.0,
+  "lm_eval_version": 3.0,
+  "model": "local-chat-completions",
+  "model_args": {
+    "model": "Qwen3.6-35B-A3B-NVFP4",
+    "base_url": "http://127.0.0.1:18080/v1/chat/completions",
+    "num_concurrent": 4,
+    "max_retries": 3,
+    "tokenized_requests": false,
+    "tokenizer": "${HOME}/models/llm/nvfp4/nvidia/Qwen3.6-35B-A3B-NVFP4"
+  },
+  "source_file": "raw/Qwen3.6-35B-A3B-NVFP4/results_2026-07-11T05-42-44.208382.json"
+}

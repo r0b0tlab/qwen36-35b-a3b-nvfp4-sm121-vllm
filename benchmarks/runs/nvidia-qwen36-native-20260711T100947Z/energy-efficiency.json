@@ -1,0 +1,83 @@
+{
+  "method": "Board-power samples at GPU utilization >=10% from stable repetitions 2 and 3, joined to output throughput from those repetitions. Idle/client-bookkeeping samples are excluded.",
+  "rows": [
+    {
+      "concurrency": 1,
+      "output_throughput_tok_s": 90.8597915603042,
+      "mean_active_power_w": 29.514418604651162,
+      "active_power_samples": 43,
+      "active_utilization_threshold_pct": 10.0,
+      "output_tokens_per_joule": 3.0784882730498935,
+      "joules_per_1k_output_tokens": 324.83476021472336,
+      "source_phases": [
+        "concurrency-c1-rep2",
+        "concurrency-c1-rep3"
+      ]
+    },
+    {
+      "concurrency": 2,
+      "output_throughput_tok_s": 134.7058070130705,
+      "mean_active_power_w": 30.693103448275863,
+      "active_power_samples": 29,
+      "active_utilization_threshold_pct": 10.0,
+      "output_tokens_per_joule": 4.3887972175924554,
+      "joules_per_1k_output_tokens": 227.85286045832981,
+      "source_phases": [
+        "concurrency-c2-rep2",
+        "concurrency-c2-rep3"
+      ]
+    },
+    {
+      "concurrency": 4,
+      "output_throughput_tok_s": 193.22372815136248,
+      "mean_active_power_w": 32.49523809523809,
+      "active_power_samples": 21,
+      "active_utilization_threshold_pct": 10.0,
+      "output_tokens_per_joule": 5.946216722125751,
+      "joules_per_1k_output_tokens": 168.1741595927744,
+      "source_phases": [
+        "concurrency-c4-rep2",
+        "concurrency-c4-rep3"
+      ]
+    },
+    {
+      "concurrency": 8,
+      "output_throughput_tok_s": 286.31210297127143,
+      "mean_active_power_w": 34.86034482758621,
+      "active_power_samples": 29,
+      "active_utilization_threshold_pct": 10.0,
+      "output_tokens_per_joule": 8.213117351171542,
+      "joules_per_1k_output_tokens": 121.75644852527977,
+      "source_phases": [
+        "concurrency-c8-rep2",
+        "concurrency-c8-rep3"
+      ]
+    },
+    {
+      "concurrency": 16,
+      "output_throughput_tok_s": 373.4742438482367,
+      "mean_active_power_w": 37.34119047619048,
+      "active_power_samples": 42,
+      "active_utilization_threshold_pct": 10.0,
+      "output_tokens_per_joule": 10.001669445605161,
+      "joules_per_1k_output_tokens": 99.98330833053181,
+      "source_phases": [
+        "concurrency-c16-rep2",
+        "concurrency-c16-rep3"
+      ]
+    },
+    {
+      "concurrency": 32,
+      "output_throughput_tok_s": 463.67497421863027,
+      "mean_active_power_w": 40.81142857142857,
+      "active_power_samples": 70,
+      "active_utilization_threshold_pct": 10.0,
+      "output_tokens_per_joule": 11.361400236384808,
+      "joules_per_1k_output_tokens": 88.01731997764736,
+      "source_phases": [
+        "concurrency-c32-rep2",
+        "concurrency-c32-rep3"
+      ]
+    }
+  ]
+}

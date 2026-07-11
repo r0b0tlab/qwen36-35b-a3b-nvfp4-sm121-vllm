@@ -1,0 +1,6 @@
+(EngineCore pid=187) INFO 07-10 22:25:39 [__init__.py:594] Selected FlashInferFP8ScaledMMLinearKernel for ModelOptFp8LinearMethod
+(EngineCore pid=187) WARNING 07-10 22:25:39 [modelopt.py:2488] R0B0TLAB_NATIVE_W4A4_FROM_W4A16: routing calibrated W4A16-labelled linear layers through native NVFP4 W4A4; checkpoint input_scale tensors are required and consumed.
+(EngineCore pid=187) INFO 07-10 22:25:39 [__init__.py:937] Using FlashInferCutlassNvFp4LinearKernel for NVFP4 GEMM
+(EngineCore pid=187) INFO 07-10 22:25:39 [nvfp4.py:224] Using 'FLASHINFER_B12X' NvFp4 MoE backend out of potential backends: ['FLASHINFER_TRTLLM', 'FLASHINFER_CUTEDSL', 'FLASHINFER_CUTEDSL_BATCHED', 'FLASHINFER_CUTLASS', 'VLLM_CUTLASS', 'MARLIN', 'EMULATION'].
+(EngineCore pid=187) INFO 07-10 22:31:48 [kv_cache_utils.py:2146] GPU KV cache size: 5,739,315 tokens
+(EngineCore pid=187) INFO 07-10 22:31:48 [kv_cache_utils.py:2147] Maximum concurrency for 65,536 tokens per request: 87.58x
