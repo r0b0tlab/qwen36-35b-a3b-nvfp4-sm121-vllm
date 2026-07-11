@@ -35,7 +35,9 @@ The native patch is valid only for the pinned checkpoint after all 121 ordinary 
 - four-depth llama-benchy coherence pass;
 - release consistency, manifest, and public safety pass;
 - FP8 KV retained; NVFP4 KV not adopted;
-- no external upload performed during local closure.
+- clean `main` published to `r0b0tlab/qwen36-35b-a3b-nvfp4-sm121-vllm`;
+- GitHub Pages report published from `docs/` and anonymously verified;
+- no model-weight or GHCR upload performed.
 
 ## Operational boundary
 

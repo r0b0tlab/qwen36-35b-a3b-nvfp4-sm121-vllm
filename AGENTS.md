@@ -64,6 +64,8 @@ Run ID:       nvidia-qwen36-native-20260711T100947Z
 Run root:     benchmarks/runs/nvidia-qwen36-native-20260711T100947Z/
 HTML report:  docs/index.html
 Image digest: sha256:a072794deee4b7875f4cbc40fb189a674188d7f7a10f32bf45038527c9485cfa
+Repository:   https://github.com/r0b0tlab/qwen36-35b-a3b-nvfp4-sm121-vllm
+Pages:        https://r0b0tlab.github.io/qwen36-35b-a3b-nvfp4-sm121-vllm/
 ```
 
 Accepted headline values:

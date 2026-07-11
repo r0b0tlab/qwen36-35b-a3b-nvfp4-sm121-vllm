@@ -25,6 +25,9 @@ Manifest SHA-256:4ad828918634baf239257627c6f1d0226a09d780c1d1dd9774b46713a6210d2
 
 The self-contained report is at [`docs/index.html`](docs/index.html). Machine-readable release evidence is under [`benchmarks/runs/nvidia-qwen36-native-20260711T100947Z/`](benchmarks/runs/nvidia-qwen36-native-20260711T100947Z/).
 
+- Repository: https://github.com/r0b0tlab/qwen36-35b-a3b-nvfp4-sm121-vllm
+- Published report: https://r0b0tlab.github.io/qwen36-35b-a3b-nvfp4-sm121-vllm/
+
 ## Results
 
 ### Quality and runtime
