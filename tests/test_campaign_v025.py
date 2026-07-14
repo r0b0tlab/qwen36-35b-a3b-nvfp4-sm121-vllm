@@ -29,6 +29,7 @@ class CampaignContractTests(unittest.TestCase):
         ):
             self.assertIn(required, script)
         self.assertIn("--requests 250", script)
+        self.assertLess(script.index("docker stop --time 30"), script.index("campaign-complete"))
 
     def test_shell_helpers_are_invoked_through_bash(self):
         for rel in ("scripts/run_full_campaign.sh", "scripts/finalize_release.sh"):

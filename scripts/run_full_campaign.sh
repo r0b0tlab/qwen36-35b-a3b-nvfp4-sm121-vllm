@@ -28,10 +28,6 @@ cleanup() {
   fi
   if (( rc == 0 )); then
     printf 'COMPLETE\n' > "${RUN}/STATUS"
-    if [[ "${STOP_CONTAINER_ON_SUCCESS:-1}" == "1" ]]; then
-      docker stop --time 30 "${CONTAINER}" >/dev/null
-      docker rm "${CONTAINER}" >/dev/null
-    fi
   else
     printf 'FAILED exit=%s\n' "${rc}" > "${RUN}/STATUS"
   fi
@@ -78,5 +74,9 @@ python3 "${ROOT}/scripts/run_durability.py" \
 
 printf 'finalize-release\n' > "${RUN}/phase.txt"
 PORT="${PORT}" CONTAINER="${CONTAINER}" bash "${ROOT}/scripts/finalize_release.sh" "${RUN_ID}"
+if [[ "${STOP_CONTAINER_ON_SUCCESS:-1}" == "1" ]]; then
+  docker stop --time 30 "${CONTAINER}" >/dev/null
+  docker rm "${CONTAINER}" >/dev/null
+fi
 printf 'campaign-complete\n' > "${RUN}/phase.txt"
 echo "FULL_CAMPAIGN_COMPLETE run=${RUN}"
