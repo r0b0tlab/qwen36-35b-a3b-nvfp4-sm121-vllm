@@ -27,16 +27,17 @@ class ReleaseToolingTests(unittest.TestCase):
             self.assertIn(required, capture)
         self.assertNotIn(FORBIDDEN, capture.lower())
 
-    def test_release_verifier_requires_full_v025_contract(self):
+    def test_release_verifier_requires_reuse_and_clean_image_contract(self):
         verify = source("scripts/verify_release.py")
         for required in (
             'runtime["runtime"]["vllm"] == "0.25.0"',
             'runtime["runtime"]["torch"] == "2.11.0+cu130"',
             'runtime["runtime"]["cuda"] == "13.0"',
             'runtime["runtime"]["flashinfer"] == "0.6.13"',
-            "durability.summary.json",
+            "evidence-reuse.json",
+            "equivalence/summary.json",
             "runtime-audit.json",
-            "w4a16-input-scale-audit.json",
+            "w4a16-input-scale-audit-clean.json",
             "mtp_acceptance_rate",
         ):
             self.assertIn(required, verify)

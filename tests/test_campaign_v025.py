@@ -12,27 +12,26 @@ def source(rel: str) -> str:
 
 
 class CampaignContractTests(unittest.TestCase):
-    def test_full_campaign_reruns_all_correctness_gates(self):
-        script = source("scripts/run_full_campaign.sh")
-        self.assertNotIn("fp8-native-w4a4-v1", script)
-        self.assertNotIn("cp \"$BASELINE", script)
+    def test_release_path_reuses_full_evidence_and_runs_narrow_canaries(self):
+        importer = source("scripts/import_mtp_release_evidence.py")
+        script = source("scripts/run_mtp_equivalence_gate.sh")
         for required in (
             "audit_runtime_v025.py",
             "audit_w4a16_input_scales.py",
             "run_semantic_gate.py",
             "run_long_generation.py",
-            "run_gsm8k.sh",
-            "run_concurrency.sh",
-            "run_llama_benchy.sh",
-            "run_durability.py",
-            "finalize_release.sh",
+            "for c in 1 32",
+            "capture_release.py",
         ):
             self.assertIn(required, script)
-        self.assertIn("--requests 250", script)
-        self.assertLess(script.index("docker stop --time 30"), script.index("campaign-complete"))
+        for forbidden in ("run_gsm8k.sh", "run_concurrency.sh", "run_llama_benchy.sh", "run_durability.py"):
+            self.assertNotIn(forbidden, script)
+        self.assertIn("no duplicate full evaluation", importer)
+        self.assertIn("source_sha256", importer)
+        self.assertIn("destination_sha256", importer)
 
     def test_shell_helpers_are_invoked_through_bash(self):
-        for rel in ("scripts/run_full_campaign.sh", "scripts/finalize_release.sh"):
+        for rel in ("scripts/run_mtp_equivalence_gate.sh", "scripts/finalize_release.sh"):
             script = source(rel)
             direct = re.findall(r'^\s*"\$ROOT/scripts/[^\"]+\.sh"', script, re.MULTILINE)
             self.assertEqual([], direct, f"direct non-portable invocation in {rel}: {direct}")

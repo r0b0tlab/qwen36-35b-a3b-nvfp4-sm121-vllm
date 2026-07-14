@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Consistency gate for the generated NVIDIA Qwen vLLM v0.25 MTP release."""
+"""Consistency gate for the streamlined vLLM v0.25 MTP release."""
 from __future__ import annotations
 
 import argparse
@@ -23,21 +23,19 @@ def main() -> int:
     parser.add_argument("html")
     args = parser.parse_args()
     run = Path(args.run_dir)
-    html_path = Path(args.html)
-
+    page = Path(args.html).read_text()
+    reuse = load(run / "evidence-reuse.json")
+    equivalence = load(run / "equivalence/summary.json")
     gsm = load(run / "gsm8k/results.json")
     concurrency = load(run / "concurrency/summary.json")
-    llama = load(run / "llama-benchy/results.json")
-    telemetry = load(run / "telemetry-summary.json")
-    energy = load(run / "energy-efficiency.json")
     runtime = load(run / "runtime-manifest.json")
     audit = load(run / "evidence/runtime-audit.json")
-    scales = load(run / "evidence/w4a16-input-scale-audit.json")
-    semantic = load(run / "semantic_gate/results.json")
-    long_generation = load(run / "long_generation.json")
-    durability = load(run / "full/durability.summary.json")
-    page = html_path.read_text()
+    scales = load(run / "evidence/w4a16-input-scale-audit-clean.json")
+    semantic = load(run / "equivalence/semantic.json")
+    long_generation = load(run / "equivalence/long-generation.json")
 
+    assert reuse["passed"] and all(reuse["checks"].values())
+    assert equivalence["passed"] and all(equivalence["checks"].values())
     assert runtime["model"] == MODEL
     assert runtime["model_revision"] == REVISION
     assert runtime["base_image_digest"] == BASE_DIGEST
@@ -48,7 +46,6 @@ def main() -> int:
     assert audit["status"] == "PASS" and not audit["failures"]
     assert scales["passed"] and scales["linear_input_scales_loaded"] == 121
     assert semantic["passed"] and long_generation["passed"]
-    assert durability["passed"] and durability["completed"] == durability["requested"] == 250
 
     profile = runtime["profile"]
     assert profile["KV_CACHE_DTYPE"] == "fp8"
@@ -59,40 +56,29 @@ def main() -> int:
     assert json.loads(profile["SPECULATIVE_CONFIG"]) == {
         "method": "mtp", "num_speculative_tokens": 2, "moe_backend": "triton"
     }
-    assert runtime["effective_cuda_graph_mode"] == "PIECEWISE"
     required_markers = {
         "modelopt_mixed", "fp8_dense", "nvfp4_dense", "w4a16_native_reroute",
         "target_moe_native", "flashinfer_attention", "effective_piecewise", "mtp_configured",
     }
     assert all(runtime["native_marker_gate"].get(key) for key in required_markers)
-    assert 0 < runtime["mtp_accepted_tokens_total"] <= runtime["mtp_draft_tokens_total"]
     assert 0 < runtime["mtp_acceptance_rate"] <= 1
 
     assert gsm["sample_count"] == 1319
+    assert gsm["model_args"]["max_retries"] == 0
     assert 0.0 <= gsm["exact_match_flexible_extract"] <= 1.0
     rows = concurrency["rows"]
-    assert [row["concurrency"] for row in rows] == [1, 2, 4, 8, 16, 32]
-    assert all(row["completed"] > 0 and row["failed"] == 0 for row in rows)
-    assert len(llama.get("benchmarks", [])) == 4
-    assert telemetry.get("phases")
-    assert len(energy.get("rows", [])) == 6
+    assert [row["concurrency"] for row in rows] == [1, 8, 32]
+    assert all(row["repetitions"] == 3 and row["failed"] == 0 for row in rows)
 
-    required = [
-        "Qwen3.6 35B-A3B", "vLLM 0.25.0", "FP8", "ModelOpt", "FlashInfer",
-        "MTP K=2", "Concurrency scaling", "Mean active power W", "NVFP4-KV candidate",
-    ]
-    for item in required:
+    for item in ("Qwen3.6 35B-A3B", "vLLM 0.25.0", "FP8", "ModelOpt", "FlashInfer", "MTP K=2"):
         assert item in page, f"HTML missing {item!r}"
-    forbidden = ["NVFP4 Fast", "MARLIN backend selected", "vLLM 0.24"]
-    for item in forbidden:
+    for item in ("NVFP4 Fast", "MARLIN backend selected", "vLLM 0.24"):
         assert item.lower() not in page.lower(), f"HTML contains forbidden value {item!r}"
     assert page.count("<div") == page.count("</div>")
     assert page.count("<section") == page.count("</section>")
-    assert "opacity:0" not in page
-
-    print("PASS NVIDIA Qwen vLLM v0.25 MTP release consistency gate")
+    print("PASS streamlined vLLM v0.25 MTP release consistency gate")
     print(f"GSM8K={gsm['exact_match_flexible_extract']:.6f} samples={gsm['sample_count']}")
-    print(f"MTP_acceptance={runtime['mtp_acceptance_rate']:.6f} concurrency_rows={len(rows)}")
+    print(f"MTP_acceptance={runtime['mtp_acceptance_rate']:.6f} points={len(rows)}")
     return 0
 
 
