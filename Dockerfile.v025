@@ -8,7 +8,8 @@ LABEL org.opencontainers.image.title="NVIDIA Qwen3.6 35B-A3B NVFP4 vLLM v0.25 MT
       org.opencontainers.image.revision="${VLLM_RELEASE_COMMIT}" \
       org.opencontainers.image.source="https://github.com/r0b0tlab/qwen36-35b-a3b-nvfp4-sm121-vllm" \
       org.opencontainers.image.licenses="MIT" \
-      io.r0b0tlab.vllm.release-commit="${VLLM_RELEASE_COMMIT}"
+      io.r0b0tlab.vllm.release-commit="${VLLM_RELEASE_COMMIT}" \
+      io.r0b0tlab.base-image.digest="sha256:2d144fafe3f330fa17fa1facf4f589eee49b75bdf539ac69d1fe002b5b5bb0a5"
 
 ENV MODEL_ID=/models/model \
     SERVED_MODEL_NAME=Qwen3.6-35B-A3B-NVFP4 \

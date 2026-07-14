@@ -15,6 +15,7 @@ EXCLUDED_NAMES = {
     "normalize.stdout.json",
     "progress.jsonl",
     "server.log",
+    "durability.jsonl",
     "MANIFEST.sha256",
 }
 
