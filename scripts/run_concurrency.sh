@@ -27,6 +27,7 @@ for c in 1 2 4 8 16 32; do
       --num-prompts "$prompts" \
       --max-concurrency "$c" \
       --request-rate inf \
+      --seed 0 \
       --ignore-eos \
       --temperature 0 \
       --percentile-metrics ttft,tpot,itl,e2el \
