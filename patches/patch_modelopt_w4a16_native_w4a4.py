@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
-"""Patch vLLM ModelOpt mixed linear routing for this calibrated NVIDIA checkpoint.
+"""Patch ModelOpt mixed linear routing for the pinned NVIDIA checkpoint.
 
-The checkpoint labels shared-expert/LM-head linear layers W4A16_NVFP4 in
-hf_quant_config.json, but also ships finite calibrated input_scale tensors and
-declares 4-bit input activations in config.json. Upstream vLLM discards those
-scales and hard-pins Marlin. This dedicated image instead routes only LinearBase
-W4A16 layers through ModelOptNvFp4LinearMethod, which consumes the published
-input scales and selects the native FlashInfer/CUTLASS W4A4 kernel. RoutedExperts
+The target checkpoint labels eligible ordinary linear layers W4A16_NVFP4 but
+ships calibrated input scales for W4A4 execution. This patch changes only the
+ordinary ``LinearBase``/``ParallelLMHead`` dispatcher branch. Routed experts
 remain on the independent native MoE backend.
 """
 from __future__ import annotations
 
+import argparse
 import importlib.util
 from pathlib import Path
 
@@ -28,18 +26,48 @@ NEW = f'''            if quant_algo == "W4A16_NVFP4":
                 return ModelOptNvFp4LinearMethod(self.nvfp4_config)
 '''
 
-spec = importlib.util.find_spec(MODULE)
-if spec is None or spec.origin is None:
-    raise SystemExit(f"cannot locate {MODULE}")
-path = Path(spec.origin)
-text = path.read_text()
-if MARKER in text:
-    print(f"already patched: {path}")
-    raise SystemExit(0)
-if text.count(OLD) != 1:
-    raise SystemExit(f"expected exactly one W4A16 linear routing block in {path}")
-path.write_text(text.replace(OLD, NEW))
-check = path.read_text()
-if MARKER not in check or OLD in check:
-    raise SystemExit("post-patch verification failed")
-print(f"patched: {path}")
+
+def patch_text(text: str) -> tuple[str, str]:
+    if MARKER in text:
+        if OLD in text:
+            raise ValueError("marker and unpatched routing block coexist")
+        return text, "already-patched"
+    if text.count(OLD) != 1:
+        raise ValueError("expected exactly one W4A16 ordinary-linear routing block")
+    patched = text.replace(OLD, NEW)
+    if MARKER not in patched or OLD in patched:
+        raise ValueError("post-patch verification failed")
+    return patched, "patched"
+
+
+def locate_module_path() -> Path:
+    spec = importlib.util.find_spec(MODULE)
+    if spec is None or spec.origin is None:
+        raise RuntimeError(f"cannot locate {MODULE}")
+    return Path(spec.origin)
+
+
+def patch_file(path: Path) -> str:
+    text = path.read_text()
+    patched, status = patch_text(text)
+    if status == "patched":
+        path.write_text(patched)
+    current = path.read_text()
+    check, check_status = patch_text(current)
+    if check != current or check_status != "already-patched":
+        raise RuntimeError("on-disk post-patch verification failed")
+    return status
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--path", type=Path, help="Explicit modelopt.py path")
+    args = parser.parse_args()
+    path = args.path or locate_module_path()
+    status = patch_file(path)
+    print(f"{status}: {path}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

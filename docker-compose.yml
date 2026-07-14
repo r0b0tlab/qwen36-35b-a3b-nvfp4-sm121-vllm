@@ -1,6 +1,9 @@
 services:
   qwen36-nvfp4-vllm:
-    image: ghcr.io/r0b0tlab/qwen36-35b-a3b-nvfp4-sm121-vllm:latest
+    image: ${IMAGE:-qwen36-35b-a3b-nvfp4-sm121-vllm:v025-mtp}
+    build:
+      context: .
+      dockerfile: Dockerfile.v025
     container_name: qwen36-nvfp4-vllm
     network_mode: host
     ipc: host
