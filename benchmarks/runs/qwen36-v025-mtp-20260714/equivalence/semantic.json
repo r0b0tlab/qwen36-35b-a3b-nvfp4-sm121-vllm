@@ -1,0 +1,113 @@
+{
+  "model_ids": [
+    "Qwen3.6-35B-A3B-NVFP4"
+  ],
+  "profile": "native W4A4 linear + B12X MoE + FP8 KV + MTP K=2",
+  "probes": {
+    "arithmetic": {
+      "prompt": "Compute 19 times 23. End your answer with the integer result.",
+      "status": 200,
+      "elapsed_seconds": 70.68607520499972,
+      "text": "To compute $19 \\times 23$, we can use the distributive property or standard multiplication.\n\n**Method 1: Distributive Property**\n$$19 \\times 23 = (20 - 1) \\times 23$$\n$$= (20 \\times 23) - (1 \\times 23)$$\n$$= 460 - 23$$\n$$= 437$$\n\n**Method 2: Standard Multiplication**\n$$\n\\begin{array}{r}\n  23 \\\\\n\\times 19 \\\\\n\\hline\n 207 & (9 \\times 23) \\\\\n 230 & (10 \\times 23) \\\\\n\\hline\n 437\n\\end{array}\n$$\n\nThe result is 437.\n\n",
+      "finish_reason": "length",
+      "usage": {
+        "prompt_tokens": 29,
+        "total_tokens": 221,
+        "completion_tokens": 192,
+        "prompt_tokens_details": null
+      }
+    },
+    "exact_string": {
+      "prompt": "Reply with exactly this text and nothing else: GB10_NATIVE_OK",
+      "status": 200,
+      "elapsed_seconds": 25.609015115000147,
+      "text": "GB10_NATIVE_OK",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 32,
+        "completion_tokens": 6,
+        "prompt_tokens_details": null
+      }
+    },
+    "word_problem": {
+      "prompt": "Six boxes contain nine bolts each. How many bolts are there? End with the integer result.",
+      "status": 200,
+      "elapsed_seconds": 6.515922087000945,
+      "text": "To find the total number of bolts, we need to multiply the number of boxes by the number of bolts in each box.\n\n1.  **Identify the given values:**\n    *   Number of boxes = 6\n    *   Number of bolts per box = 9\n\n2.  **Perform the multiplication:**\n    $$ 6 \\times 9 = 54 $$\n\nThere are 54 bolts in total.\n\n54",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 31,
+        "total_tokens": 126,
+        "completion_tokens": 95,
+        "prompt_tokens_details": null
+      }
+    },
+    "code": {
+      "prompt": "Write a Python function named add that returns the sum of arguments a and b. Return only the function definition.",
+      "status": 200,
+      "elapsed_seconds": 1.9666166780007188,
+      "text": "```python\ndef add(a, b):\n    return a + b\n```",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 34,
+        "total_tokens": 52,
+        "completion_tokens": 18,
+        "prompt_tokens_details": null
+      }
+    }
+  },
+  "repeats": [
+    {
+      "prompt": "Reply with exactly this text and nothing else: DETERMINISTIC_NATIVE",
+      "status": 200,
+      "elapsed_seconds": 0.8979300480004895,
+      "text": "DETERMINISTIC_NATIVE",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 32,
+        "completion_tokens": 6,
+        "prompt_tokens_details": null
+      }
+    },
+    {
+      "prompt": "Reply with exactly this text and nothing else: DETERMINISTIC_NATIVE",
+      "status": 200,
+      "elapsed_seconds": 0.27818067699990934,
+      "text": "DETERMINISTIC_NATIVE",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 32,
+        "completion_tokens": 6,
+        "prompt_tokens_details": null
+      }
+    },
+    {
+      "prompt": "Reply with exactly this text and nothing else: DETERMINISTIC_NATIVE",
+      "status": 200,
+      "elapsed_seconds": 0.22521427699939522,
+      "text": "DETERMINISTIC_NATIVE",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 32,
+        "completion_tokens": 6,
+        "prompt_tokens_details": null
+      }
+    }
+  ],
+  "checks": {
+    "model_exact": true,
+    "arithmetic_437": true,
+    "exact_string": true,
+    "word_problem_54": true,
+    "code_shape": true,
+    "repeat_deterministic": true,
+    "repeat_exact": true,
+    "all_http_200": true,
+    "no_empty_loop_or_template_leakage": true
+  },
+  "passed": true
+}

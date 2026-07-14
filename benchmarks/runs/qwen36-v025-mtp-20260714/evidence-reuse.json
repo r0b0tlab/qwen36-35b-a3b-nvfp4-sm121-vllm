@@ -1,0 +1,55 @@
+{
+  "base_image_digest": "sha256:2d144fafe3f330fa17fa1facf4f589eee49b75bdf539ac69d1fe002b5b5bb0a5",
+  "checks": {
+    "full_gsm8k_1319": true,
+    "long_generation_gate": true,
+    "mtp_metrics_positive": true,
+    "published_scales_121": true,
+    "semantic_gate": true,
+    "three_repetitions_first_dropped": true,
+    "zero_retries": true
+  },
+  "destination_sha256": {
+    "concurrency/summary.json": "4c8d2b3ac488496b024fd4e3e44c231ef40a9b7fe87ea3bbfed30122bcdadb1b",
+    "evidence/w4a16-input-scale-audit.json": "918f58d4c8d4471a7155d6a662e15b627b3813966fa2115c0ae0809923d4ebb3",
+    "gsm8k/results.json": "25fdae2399df10ed26fc88f4c794497a1e27f7c9b497c925cf1b581aee64b2b8",
+    "long_generation.json": "88aa34a88f488d2cddb6e1ca27a2b4075d313254b57eccb4fb0ad90580be140f",
+    "semantic_gate/results.json": "a7aecb6bd441e51d51a13cd550e85400fcb3725c95a71ce0c21b4fad4ebb0af3",
+    "spec-metrics.json": "f834c809b7ad7ac31f0376df08af119457b6fbeb68cfded97b663066245928ca"
+  },
+  "evidence_policy": "hash-verified reuse; no duplicate full evaluation",
+  "model_revision": "491c2f1ea524c639598bf8fa787a93fed5a6fbce",
+  "passed": true,
+  "profile": {
+    "attention_backend": "flashinfer",
+    "kv_cache_dtype": "fp8",
+    "linear_backend": "flashinfer_cutlass",
+    "moe_backend": "flashinfer_b12x",
+    "quantization": "modelopt_mixed",
+    "speculative": {
+      "method": "mtp",
+      "moe_backend": "triton",
+      "num_speculative_tokens": 2
+    }
+  },
+  "schema_version": 1,
+  "source_sha256": {
+    "c1_r1": "b27c093033f3bead9ef08327f3338f2403cd0643e55fe84124eb31b6dadbe584",
+    "c1_r2": "c3af1e1ce9216acba243a4d819e33abc30d803f4d0d2ff901229440e3f346ddf",
+    "c1_r3": "5d0ce22180aa7d60b1905cd372fc3aced19eee535427f68adbcae4608919ab9f",
+    "c32_r1": "61414adec20377249a61db9dd151ab10f14f18e7d8183a90ecfb477caf1c68c4",
+    "c32_r2": "f094cd8e0ad8d197eb21fb04e160bcbe75f75ff18421622ec76e06182795ae4f",
+    "c32_r3": "f0cb1552416aad77852ac0ff1e91422c974c5a8807dbd896f82340b68c6a8df9",
+    "c8_r1": "a8a38f7d170878496af0102cd554472371ce30a948972804a844484c76ab0e8f",
+    "c8_r2": "eab3941083af39460c408b378de8757f585493302300db2106ec7672442ef795",
+    "c8_r3": "4fe6fb7adae58b3789889432101a7f77a57e31dcf8d1201ce338093ba9a0fad5",
+    "gsm8k": "92a1503159687bd265648eff5ae4d0aad4cb7e09d12abd177830c0d358a50da4",
+    "long_generation": "231ea684a63df173f59d43e24a8d4842f0ad97908b2cbcb470990009599f1c3f",
+    "profile_summary": "900ae4dda4372a451704169211308e6641b181327ba03e3948689d013806e151",
+    "scale_audit": "90d68e16b343042e8b9c4b4bd25e871a44dc7499cb0269ae906bb3b2e943724b",
+    "semantic": "97e3e1845e007d34a1984f773ff478dac92edec01282a8f00d7a293ee42ea8e1",
+    "spec_metrics": "90383661eec461d6a3e52d7186664851e130078e4c685477b1202f515d662a60"
+  },
+  "source_type": "completed-vllm-v025-mtp-qualification",
+  "vllm_release_commit": "702f4814fe54fabff350d43cb753ae3e47c0c276"
+}

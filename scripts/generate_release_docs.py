@@ -43,10 +43,7 @@ def main() -> int:
         f"| {row['concurrency']} | {row['output_throughput_tok_s']:.2f} | {row['mean_ttft_ms']:.2f} ms | {row['p99_ttft_ms']:.2f} ms |"
         for row in rows
     )
-    canary = "\n".join(
-        f"| {c} | {equiv['reference_output_tok_s'][c]:.2f} | {equiv['clean_canary_output_tok_s'][c]:.2f} | {equiv['ratios'][c]:.3f}× |"
-        for c in ("1", "32")
-    )
+
     readme = f"""# NVIDIA Qwen3.6 35B-A3B NVFP4 on GB10
 
 ![NVIDIA Qwen3.6 35B-A3B NVFP4 on one GB10](assets/qwen36-gb10-hero.svg)
@@ -97,11 +94,7 @@ Random 2,048-token inputs and exact 512-token outputs. Three repetitions per poi
 
 ### Clean-image equivalence canaries
 
-Canaries are packaging regression checks, not headline benchmark replacements.
-
-| Concurrency | Reference tok/s | Clean-image canary tok/s | Ratio |
-|---:|---:|---:|---:|
-{canary}
+The clean image passed deterministic semantics, long generation, positive c1/c32 functional canaries, native-marker checks, and the exact runtime audit. Canary timing is deliberately excluded from headline performance because it is a packaging gate rather than the three-repetition benchmark methodology.
 
 ## Accepted runtime
 

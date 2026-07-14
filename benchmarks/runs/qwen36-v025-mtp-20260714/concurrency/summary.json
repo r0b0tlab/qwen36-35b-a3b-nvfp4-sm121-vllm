@@ -1,0 +1,54 @@
+{
+  "method": "vllm bench serve random 2048 input / 512 output / ignore_eos; three reps, first dropped",
+  "rows": [
+    {
+      "completed": 16,
+      "concurrency": 1,
+      "failed": 0,
+      "mean_itl_ms": 25.76691324094429,
+      "mean_tpot_ms": 10.069331421599898,
+      "mean_ttft_ms": 357.46698093754503,
+      "output_throughput_tok_s": 93.04781802160952,
+      "p99_itl_ms": 29.422039700580164,
+      "p99_tpot_ms": 10.783118753815646,
+      "p99_ttft_ms": 382.44718548960464,
+      "repetitions": 3,
+      "request_throughput_rps": 0.18173401957345608,
+      "total_throughput_tok_s": 467.12458056112223,
+      "warmup_rep_dropped": 1
+    },
+    {
+      "completed": 32,
+      "concurrency": 8,
+      "failed": 0,
+      "mean_itl_ms": 59.86895444989524,
+      "mean_tpot_ms": 24.12329144257557,
+      "mean_ttft_ms": 1353.201547750075,
+      "output_throughput_tok_s": 287.1815397082694,
+      "p99_itl_ms": 321.2840480603518,
+      "p99_tpot_ms": 29.565245348972663,
+      "p99_ttft_ms": 2141.140242224674,
+      "repetitions": 3,
+      "request_throughput_rps": 0.5609014447427136,
+      "total_throughput_tok_s": 1441.7621073708492,
+      "warmup_rep_dropped": 1
+    },
+    {
+      "completed": 128,
+      "concurrency": 32,
+      "failed": 0,
+      "mean_itl_ms": 150.51787719730123,
+      "mean_tpot_ms": 58.08933387937254,
+      "mean_ttft_ms": 10142.401304914038,
+      "output_throughput_tok_s": 397.9821330102272,
+      "p99_itl_ms": 876.6010833197106,
+      "p99_tpot_ms": 72.04747599583261,
+      "p99_ttft_ms": 18016.794302395065,
+      "repetitions": 3,
+      "request_throughput_rps": 0.7773088535356,
+      "total_throughput_tok_s": 1997.975244406568,
+      "warmup_rep_dropped": 1
+    }
+  ],
+  "scope": "selected MTP qualification points"
+}

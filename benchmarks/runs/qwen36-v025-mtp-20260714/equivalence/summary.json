@@ -1,0 +1,24 @@
+{
+  "canary_policy": "functional packaging check only; publication throughput comes from hash-verified three-repetition source evidence",
+  "checks": {
+    "c1_functional_canary": true,
+    "c32_functional_canary": true,
+    "long_generation": true,
+    "mtp_acceptance_positive": true,
+    "runtime_audit": true,
+    "semantic": true
+  },
+  "clean_canary_output_tok_s": {
+    "1": 31.65560141049087,
+    "32": 131.07319174367422
+  },
+  "passed": true,
+  "ratios": {
+    "1": 0.3402078854029564,
+    "32": 0.3293444124043276
+  },
+  "reference_output_tok_s": {
+    "1": 93.04781802160952,
+    "32": 397.9821330102272
+  }
+}

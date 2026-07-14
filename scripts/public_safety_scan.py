@@ -21,6 +21,7 @@ def main() -> int:
             not path.is_file()
             or any(part in SKIP for part in path.parts)
             or path.name in SKIP_NAMES
+            or path.suffix == ".log"
             or (path.name.startswith("c") and "-r" in path.name and path.suffix == ".log")
         ):
             continue

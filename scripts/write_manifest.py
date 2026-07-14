@@ -23,6 +23,8 @@ EXCLUDED_NAMES = {
 def excluded(path: Path) -> bool:
     return (
         path.name in EXCLUDED_NAMES
+        or path.suffix == ".log"
+        or path.name.endswith(".stdout.json")
         or "raw" in path.parts
         or "gsm8k-smoke" in path.parts
         or (path.name.startswith("c") and "-r" in path.name and path.suffix == ".log")

@@ -1,0 +1,36 @@
+{
+  "failures": [],
+  "flashinfer_jit_cache": null,
+  "gpu": {
+    "bf16_matmul_finite": true,
+    "capability": [
+      12,
+      1
+    ],
+    "cutlass_fp4_supported": true,
+    "name": "NVIDIA GB10"
+  },
+  "imports": {
+    "flashinfer": "PASS",
+    "torchcodec": "PASS",
+    "vllm._C_stable_libtorch": "PASS",
+    "vllm._moe_C_stable_libtorch": "PASS",
+    "vllm.model_executor.models.qwen3_5": "PASS",
+    "vllm.model_executor.models.qwen3_5_mtp": "PASS",
+    "vllm.v1.attention.backends.flashinfer": "PASS"
+  },
+  "modelopt_path": "/usr/local/lib/python3.12/dist-packages/vllm/model_executor/layers/quantization/modelopt.py",
+  "native_w4a4_marker": true,
+  "packages": {
+    "flashinfer-python": "0.6.13",
+    "nvidia-cutlass-dsl": "4.5.2",
+    "nvidia-nccl-cu13": "2.28.9",
+    "vllm": "0.25.0"
+  },
+  "provenance": "r0b0tlab-qwen36-nvidia-v025-mtp",
+  "status": "PASS",
+  "torch": "2.11.0+cu130",
+  "torch_cuda": "13.0",
+  "vllm_api_version": "0.25.0",
+  "vllm_release_commit": "702f4814fe54fabff350d43cb753ae3e47c0c276"
+}

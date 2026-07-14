@@ -1,0 +1,14 @@
+{
+  "acceptance_rate": 0.7856103680171019,
+  "accepted_tokens": 105839.0,
+  "checks": {
+    "accepted_not_above_draft": true,
+    "accepted_tokens_positive": true,
+    "draft_batches_positive": true,
+    "draft_tokens_positive": true
+  },
+  "draft_batches": 67361.0,
+  "draft_tokens": 134722.0,
+  "passed": true,
+  "profile": "mtp-k2"
+}

@@ -1,0 +1,109 @@
+{
+  "generated_at_utc": "2026-07-14T15:43:50.288849+00:00",
+  "model": "Qwen3.6-35B-A3B-NVFP4",
+  "base_url": "http://127.0.0.1:18080",
+  "tests": [
+    {
+      "name": "arithmetic_mtp_smoke",
+      "request": {
+        "model": "Qwen3.6-35B-A3B-NVFP4",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Compute 19 * 23 and give the exact answer."
+          }
+        ],
+        "temperature": 0,
+        "top_p": 1,
+        "max_tokens": 512,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "stream": false
+      },
+      "http_status": 200,
+      "elapsed_s": 3.674227114999667,
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 269,
+        "completion_tokens": 243,
+        "prompt_tokens_details": null
+      },
+      "content": "To compute $19 \\times 23$, we can use the standard multiplication algorithm or break it down using the distributive property.\n\n**Method 1: Distributive Property**\nWe can rewrite $19$ as $(20 - 1)$:\n$$\n19 \\times 23 = (20 - 1) \\times 23\n$$\n$$\n= (20 \\times 23) - (1 \\times 23)\n$$\n$$\n= 460 - 23\n$$\n$$\n= 437\n$$\n\n**Method 2: Standard Vertical Multiplication**\n$$\n\\begin{array}{r@{\\quad}l}\n  23 \\\\\n\\times 19 \\\\\n\\hline\n 207 & (9 \\times 23) \\\\\n 230 & (10 \\times 23) \\\\\n\\hline\n 437 & (207 + 230)\n\\end{array}\n$$\n\n**Final Answer:**\n$$ 437 $$",
+      "reasoning": null,
+      "response_error": null
+    },
+    {
+      "name": "long_generation",
+      "request": {
+        "model": "Qwen3.6-35B-A3B-NVFP4",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Write a detailed technical explanation of how grouped NVFP4 weight-only quantization differs from FP8 KV-cache quantization. Include headings, equations in plain text, and practical trade-offs. Aim for a sustained answer of roughly 700 words."
+          }
+        ],
+        "temperature": 0,
+        "top_p": 1,
+        "max_tokens": 2048,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "stream": false
+      },
+      "http_status": 200,
+      "elapsed_s": 19.65163775700057,
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 62,
+        "total_tokens": 1499,
+        "completion_tokens": 1437,
+        "prompt_tokens_details": null
+      },
+      "content": "# Technical Comparison: Grouped NVFP4 Weight-Only Quantization vs. FP8 KV-Cache Quantization\n\nIn the evolution of Large Language Model (LLM) inference, memory bandwidth and capacity have become the primary bottlenecks. To address this, the industry has adopted two distinct quantization strategies: Grouped NVFP4 (Near-Value Floating Point 4) for model weights and FP8 (8-bit Floating Point) for the Key-Value (KV) cache. While both aim to reduce memory footprint, they operate on different data structures, utilize different quantization granularities, and present unique hardware and accuracy trade-offs.\n\n## 1. Grouped NVFP4 Weight-Only Quantization\n\nNVFP4 is a specialized 4-bit floating-point format designed specifically for the static weights of neural network layers. Unlike uniform INT4, NVFP4 retains a floating-point exponent and mantissa structure, allowing it to better preserve the dynamic range of weight distributions, which often follow a heavy-tailed distribution.\n\n### Mechanism and Granularity\nThe \"Grouped\" aspect is critical here. Weights are not quantized element-wise. Instead, the weight matrix is divided into blocks or groups (e.g., 128 or 256 elements per group). For each group, a single scaling factor (and potentially a zero-point) is computed based on the maximum absolute value within that group. This scaling factor is then applied to all elements in the group to map them into the NVFP4 range.\n\nMathematically, for a weight $w$ in a group $G$, the quantized value $Q(w)$ is approximated as:\nQ(w) = scale * quantize_float4(w / scale)\n\nWhere `quantize_float4` maps the normalized value to the nearest NVFP4 representable value. This approach allows the quantizer to adapt to local variations in weight magnitude, significantly reducing quantization error compared to global scaling.\n\n### Hardware Implementation\nNVFP4 is optimized for modern AI accelerators (such as NVIDIA\u2019s Hopper and Blackwell architectures). The hardware includes dedicated FP4-to-FP32 conversion units that expand NVFP4 weights to FP32 on-the-fly during matrix multiplication. This allows the compute units to perform high-precision arithmetic while storing data in a highly compressed format.\n\n## 2. FP8 KV-Cache Quantization\n\nThe KV-cache stores the attention keys and values from previous tokens to avoid recomputing them. As sequence length increases, the KV-cache grows linearly, often becoming the dominant memory consumer in long-context inference. FP8 quantization is applied to these dynamic activations.\n\n### Mechanism and Granularity\nFP8 uses an 8-bit format with 1 sign bit, 5 exponent bits, and 2 mantissa bits (E5M2) or 1 sign bit, 4 exponent bits, and 3 mantissa bits (E4M3). For the KV-cache, E4M3 is typically preferred due to the near-zero mean of activation distributions. Unlike weights, KV-cache values change with every new token. Therefore, quantization must be performed dynamically.\n\nThe quantization process involves computing a scale factor for each tensor or channel based on the maximum absolute value observed in the current batch or sequence. The formula is:\nQ(x) = scale * quantize_fp8(x / scale)\n\nBecause the KV-cache is updated incrementally, the scale factor must be recomputed or tracked as new tokens arrive. This introduces a computational overhead compared to static weight quantization.\n\n### Hardware Implementation\nFP8 support is widely available in modern GPUs and TPUs. The hardware performs FP8-to-FP32 conversion during the attention mechanism\u2019s matrix multiplications. Since FP8 has higher precision than INT4, it can capture the subtle variations in activation values more accurately, which is crucial for maintaining model quality during attention computation.\n\n## 3. Key Differences and Technical Distinctions\n\n### Static vs. Dynamic Data\nThe most fundamental difference lies in the nature of the data. NVFP4 quantizes **static weights** that do not change during inference. This allows for offline calibration, complex group-wise scaling, and optimized storage formats. In contrast, FP8 quantizes **dynamic activations** (KV-cache) that vary with input. This requires online scale computation and limits the complexity of the quantization strategy to ensure low latency.\n\n### Granularity and Accuracy\nNVFP4 uses **group-wise scaling** (e.g., 128 elements per group), which provides a fine-grained adaptation to weight distributions. FP8 for KV-cache typically uses **per-tensor or per-channel scaling**, which is coarser but computationally cheaper. The higher bit-width of FP8 (8 bits vs. 4 bits) also provides a larger dynamic range, reducing the risk of overflow in activation values, which are more prone to outliers than weights.\n\n### Memory Bandwidth vs. Compute Overhead\nNVFP4 reduces memory bandwidth requirements by 50% compared to INT8 and 75% compared to FP16. This is crucial for weight-bound models. FP8 reduces KV-cache memory usage by 50% compared to FP16, alleviating the memory bottleneck in long-context scenarios. However, FP8 quantization introduces additional compute overhead for scale calculation and dequantization, whereas NVFP4 dequantization is handled efficiently by dedicated hardware units.\n\n## 4. Practical Trade-offs\n\n### Accuracy\nNVFP4 can achieve near-FP16 accuracy with careful group sizing and calibration, but aggressive quantization may lead to performance degradation in sensitive layers. FP8 generally preserves accuracy better than lower-bit formats for activations, but requires careful handling of outliers in the KV-cache to prevent quantization noise from accumulating over long sequences.\n\n### Latency and Throughput\nNVFP4 offers high throughput due to efficient hardware support and reduced memory bandwidth pressure. FP8 introduces slight latency due to dynamic scale computation, but the reduced memory footprint allows for longer context windows, which can improve overall system efficiency in long-context applications.\n\n### Hardware Compatibility\nNVFP4 requires specialized hardware support (e.g., NVIDIA Hopper/B100). FP8 is more widely supported across various AI accelerators, including older generations with FP8 tensor cores. This makes FP8 a more versatile choice for environments with heterogeneous hardware.\n\n## Conclusion\n\nGrouped NVFP4 weight-only quantization and FP8 KV-cache quantization serve complementary roles in optimizing LLM inference. NVFP4 focuses on compressing static weights with high precision and low memory footprint, leveraging group-wise scaling and dedicated hardware. FP8 targets dynamic activations, providing a balance between memory efficiency and accuracy, albeit with higher computational overhead. The choice between them depends on the specific constraints of the deployment environment, including hardware capabilities, sequence length requirements, and acceptable accuracy trade-offs. By combining both techniques, developers can achieve significant memory savings while maintaining high inference performance.",
+      "reasoning": null,
+      "response_error": null
+    },
+    {
+      "name": "reasoning_stability",
+      "request": {
+        "model": "Qwen3.6-35B-A3B-NVFP4",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Solve this carefully: A warehouse has 19 pallets with 23 boxes on each pallet. If 17 boxes are damaged, how many good boxes remain? Show the reasoning and final integer."
+          }
+        ],
+        "temperature": 0,
+        "top_p": 1,
+        "max_tokens": 2048,
+        "chat_template_kwargs": {
+          "enable_thinking": true
+        },
+        "stream": false
+      },
+      "http_status": 200,
+      "elapsed_s": 14.541820133999863,
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 53,
+        "total_tokens": 984,
+        "completion_tokens": 931,
+        "prompt_tokens_details": null
+      },
+      "content": "\n\nTo find the number of good boxes remaining, follow these steps:\n\n1. **Calculate the total number of boxes initially:**  \n   19 pallets \u00d7 23 boxes per pallet = 437 boxes\n\n2. **Subtract the damaged boxes from the total:**  \n   437 total boxes \u2212 17 damaged boxes = 420 good boxes\n\n**Final answer: 420**",
+      "reasoning": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - Warehouse has 19 pallets\n   - Each pallet has 23 boxes\n   - 17 boxes are damaged\n   - Question: How many good boxes remain?\n   - Requirements: Show reasoning and final integer.\n\n2.  **Identify Key Mathematical Operations:**\n   - Total boxes initially = (number of pallets) \u00d7 (boxes per pallet)\n   - Good boxes remaining = (total boxes) - (damaged boxes)\n\n3.  **Perform Calculations:**\n   - Total boxes = 19 \u00d7 23\n   - Let's calculate 19 \u00d7 23:\n     - 19 \u00d7 20 = 380\n     - 19 \u00d7 3 = 57\n     - 380 + 57 = 437\n     - Alternatively: (20 - 1) \u00d7 23 = 460 - 23 = 437\n   - Damaged boxes = 17\n   - Good boxes = 437 - 17 = 420\n\n4.  **Verify Calculation:**\n   - 19 \u00d7 23 = 437 (correct)\n   - 437 - 17 = 420 (correct)\n   - Check for any trick wording: \"19 pallets with 23 boxes on each pallet\" -> straightforward multiplication. \"17 boxes are damaged\" -> straightforward subtraction. No hidden tricks detected.\n\n5.  **Formulate Response:**\n   - State the steps clearly.\n   - Show the multiplication for total boxes.\n   - Show the subtraction for good boxes.\n   - Provide the final integer as requested.\n   - Keep it concise and careful.\n\n   Draft:\n   First, calculate the total number of boxes: 19 pallets \u00d7 23 boxes/pallet = 437 boxes.\n   Next, subtract the damaged boxes from the total: 437 total boxes - 17 damaged boxes = 420 good boxes.\n   Final answer: 420.\n\n6.  **Self-Correction/Verification during thought:**\n   - Check arithmetic: 19*23 = (20*23) - 23 = 460 - 23 = 437. Correct.\n   - 437 - 17 = 420. Correct.\n   - Wording matches request.\n   - No extra fluff.\n   - Ready.\u2705\n   Output matches response.\u2705\n   Proceed. \n   Output Generation. \n   [Done]\n   *Self-Correction/Refinement during thought*: \n   Wait, is there any ambiguity? \"19 pallets with 23 boxes on each pallet\" -> standard. \"17 boxes are damaged\" -> standard. All good.\n   Final answer: 420.\n   Structure: Reasoning step-by-step, then final integer. Matches prompt.\u2705\n   Output matches exactly.\u2705\n   Proceeds. \n   [Output Generation] -> \"First, find the total number of boxes... Final answer: 420\" etc.\u2705\n   All steps verified.\u2705\n   Done. \n   [Output Generation] (matches the final response)\n   \"To find the number of good boxes remaining, follow these steps:\n   1. Calculate the total number of boxes: 19 pallets \u00d7 23 boxes/pallet = 437 boxes.\n   2. Subtract the damaged boxes from the total: 437 total boxes \u2212 17 damaged boxes = 420 good boxes.\n   Final answer: 420\" -> matches requirement.\u2705\n   Done. \n   [Proceeds]\n",
+      "response_error": null
+    }
+  ],
+  "all_http_200": true,
+  "all_nonempty": true,
+  "semantic_checks": {
+    "arithmetic_437": true,
+    "long_content_present": true,
+    "word_problem_420": true,
+    "all_finished_stop": true
+  },
+  "passed": true
+}

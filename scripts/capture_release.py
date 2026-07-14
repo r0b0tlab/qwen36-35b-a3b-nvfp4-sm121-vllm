@@ -79,10 +79,23 @@ def main() -> int:
     if match:
         raise SystemExit(f"forbidden runtime marker found: {match.group(0)}")
 
-    versions = json.loads(command(
-        "docker", "exec", args.container, "python3", "-c",
-        "import json,torch,vllm,flashinfer; print(json.dumps({'torch':torch.__version__,'cuda':torch.version.cuda,'vllm':vllm.__version__,'flashinfer':getattr(flashinfer,'__version__','unknown')}))",
-    ).strip().splitlines()[-1])
+    audit_path = run / "evidence" / "runtime-audit.json"
+    if audit_path.is_file():
+        audit = json.loads(audit_path.read_text())
+        packages = audit.get("packages", {})
+        versions = {
+            "torch": audit.get("torch"),
+            "cuda": audit.get("torch_cuda"),
+            "vllm": packages.get("vllm") or audit.get("vllm_api_version"),
+            "flashinfer": packages.get("flashinfer-python"),
+        }
+    else:
+        versions = json.loads(
+            command(
+                "docker", "exec", args.container, "python3", "-c",
+                "import json,torch,vllm,flashinfer; print(json.dumps({'torch':torch.__version__,'cuda':torch.version.cuda,'vllm':vllm.__version__,'flashinfer':getattr(flashinfer,'__version__','unknown')}))",
+            ).strip().splitlines()[-1]
+        )
     gpu = command(
         "nvidia-smi", "--query-gpu=name,compute_cap,power.limit", "--format=csv,noheader,nounits"
     ).strip().splitlines()[0].split(",")

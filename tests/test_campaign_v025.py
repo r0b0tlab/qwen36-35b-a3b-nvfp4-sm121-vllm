@@ -16,8 +16,6 @@ class CampaignContractTests(unittest.TestCase):
         importer = source("scripts/import_mtp_release_evidence.py")
         script = source("scripts/run_mtp_equivalence_gate.sh")
         for required in (
-            "audit_runtime_v025.py",
-            "audit_w4a16_input_scales.py",
             "run_semantic_gate.py",
             "run_long_generation.py",
             "for c in 1 32",
@@ -26,6 +24,13 @@ class CampaignContractTests(unittest.TestCase):
             self.assertIn(required, script)
         for forbidden in ("run_gsm8k.sh", "run_concurrency.sh", "run_llama_benchy.sh", "run_durability.py"):
             self.assertNotIn(forbidden, script)
+        self.assertIn('STARTUP_TIMEOUT="${STARTUP_TIMEOUT:-1800}"', script)
+        self.assertIn("container exited during startup", script)
+        self.assertIn('equivalence/server.log', script)
+        self.assertNotIn('docker exec "${CONTAINER}" python3 /opt/r0b0tlab/audit_runtime_v025.py', script)
+        self.assertIn("startup runtime audit PASS payload not found", script)
+        self.assertIn('/usr/local/bin/vllm bench serve', script)
+        self.assertIn('w4a16-input-scale-audit-clean.json', script)
         self.assertIn("no duplicate full evaluation", importer)
         self.assertIn("source_sha256", importer)
         self.assertIn("destination_sha256", importer)
