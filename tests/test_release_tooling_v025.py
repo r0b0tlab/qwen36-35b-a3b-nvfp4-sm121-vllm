@@ -49,6 +49,20 @@ class ReleaseToolingTests(unittest.TestCase):
         self.assertNotIn("vLLM 0.24", report)
         self.assertNotIn(FORBIDDEN, report.lower())
 
+    def test_documentation_generator_is_evidence_driven(self):
+        generator = source("scripts/generate_release_docs.py")
+        for required in (
+            "gsm8k/results.json",
+            "concurrency/summary.json",
+            "spec-metrics.json",
+            "runtime-manifest.json",
+            "equivalence/summary.json",
+            "MANIFEST.sha256",
+            "evidence-reuse.json",
+        ):
+            self.assertIn(required, generator)
+        self.assertNotIn(FORBIDDEN, generator.lower())
+
     def test_raw_durability_is_ignored_and_manifest_excluded(self):
         self.assertIn("durability.jsonl", source(".gitignore"))
         manifest = source("scripts/write_manifest.py")
