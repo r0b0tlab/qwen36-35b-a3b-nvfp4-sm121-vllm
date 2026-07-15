@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "model": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+  "model_revision": "491c2f1ea524c639598bf8fa787a93fed5a6fbce",
+  "runtime_image_id": "sha256:37b90ed38c415e1846aef8ffaaca8c3d39ec58bd68221eaa722a3d1e5e0387f1",
+  "hardware": "one NVIDIA GB10 / SM121",
+  "architectural_context_tokens": 262144,
+  "previous_throughput_profile_context_tokens": 65536,
+  "context_profile": {
+    "kv_cache_dtype": "fp8",
+    "kv_cache_memory_bytes": "6G",
+    "max_num_seqs": 1,
+    "max_num_batched_tokens": 32768,
+    "depths_tested": [65536, 131072, 196608, 262144]
+  },
+  "base_ar": {
+    "validated_context_tokens": 262144,
+    "measured_kv_capacity_tokens": 609637,
+    "minimum_mem_available_gib": 51.12,
+    "added_swap_mib": 0,
+    "near_window": {
+      "prompt_token_range": [261368, 261373],
+      "positions_passed": ["begin", "quarter", "middle", "three_quarter", "end"],
+      "ordered_dual_code_passed": true,
+      "forced_generation_prompt_tokens": 261371,
+      "forced_generation_tokens": 512,
+      "combined_tokens": 261883,
+      "remaining_context_tokens": 261,
+      "middle_retrieval_elapsed_s": 129.31109514299897,
+      "forced_generation_elapsed_s": 141.6409100919991
+    }
+  },
+  "mtp_k2": {
+    "validated_context_tokens": 262144,
+    "measured_kv_capacity_tokens": 528230,
+    "minimum_mem_available_gib": 46.47,
+    "added_swap_mib": 0,
+    "drafted_tokens": 706,
+    "accepted_tokens": 534,
+    "acceptance_rate": 0.7563739376770539,
+    "near_window": {
+      "prompt_token_range": [261368, 261373],
+      "positions_passed": ["begin", "quarter", "middle", "three_quarter", "end"],
+      "ordered_dual_code_passed": true,
+      "forced_generation_prompt_tokens": 261371,
+      "forced_generation_tokens": 512,
+      "combined_tokens": 261883,
+      "remaining_context_tokens": 261,
+      "middle_retrieval_elapsed_s": 141.63413447100174,
+      "forced_generation_elapsed_s": 150.81022372900043
+    }
+  },
+  "runtime_gates": {
+    "modelopt_mixed": true,
+    "fp8_dense": true,
+    "nvfp4_dense": true,
+    "w4a16_native_reroute": true,
+    "flashinfer_b12x": true,
+    "flashinfer_attention": true,
+    "piecewise_cuda_graphs": true,
+    "forbidden_runtime_markers": []
+  },
+  "source_provenance": {
+    "private_verdict_sha256": "885575f00aef06922b5f3b5d8a11d8156d9cc7cbbca8a93ddf609ac554acfb07",
+    "private_artifact_manifest_sha256": "72e075e06aed65fc14cde3fda79ad4106cb6e43ea8e745f7b8684cac8fee93fa"
+  },
+  "claim_boundary": "Functional near-window retrieval and bounded generation at the 262,144-token architectural ceiling on one GB10. This is not a general reasoning-quality benchmark across arbitrary 262K prompts."
+}

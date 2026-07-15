@@ -27,6 +27,8 @@ MAX_NUM_SEQS=32
 MAX_NUM_BATCHED_TOKENS=32768
 ```
 
+Separate maximum-context profile: `MAX_MODEL_LEN=262144`, `MAX_NUM_SEQS=1`, `MAX_NUM_BATCHED_TOKENS=32768`, and `--kv-cache-memory-bytes 6G`. Do not replace the throughput profile with this c1 profile or merge their performance claims.
+
 Required effective markers: `FlashInferFP8ScaledMMLinearKernel`, `R0B0TLAB_NATIVE_W4A4_FROM_W4A16`, `FlashInferCutlassNvFp4LinearKernel`, `FLASHINFER_B12X`, FlashInfer attention, MTP K=2, and `PIECEWISE`. Any Marlin, weight-only W4A16 execution, emulation, missing-scale, or fallback marker invalidates the result.
 
 ## Patch boundary
@@ -39,6 +41,7 @@ Only [`patches/patch_modelopt_w4a16_native_w4a4.py`](patches/patch_modelopt_w4a1
 - GSM8K: 86.50% ± 0.94%, 1,319/1,319
 - MTP acceptance: 78.56%
 - Output throughput: c1 93.05, c8 287.18, c32 397.98 tok/s
+- Full architectural context: 262,144 tokens passed for base AR and MTP K=2; long-context MTP acceptance 75.64%
 - Image: `sha256:37b90ed38c415e1846aef8ffaaca8c3d39ec58bd68221eaa722a3d1e5e0387f1`
 
 Do not hand-edit metrics. Generate docs from machine-readable evidence, then verify and regenerate the manifest.

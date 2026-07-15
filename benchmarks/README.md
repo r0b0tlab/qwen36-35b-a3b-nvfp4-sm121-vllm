@@ -15,6 +15,15 @@ Canonical release run: [`qwen36-v025-mtp-20260714`](runs/qwen36-v025-mtp-2026071
 - Output throughput: c1 **93.05**, c8 **287.18**, c32 **397.98 tok/s**.
 - MTP acceptance: **78.56%**.
 
+## Maximum context
+
+- Separate c1 profile: 262,144 `max_model_len`, 6 GiB explicit FP8 KV, max sequences 1.
+- Base AR KV capacity: **609,637 tokens**.
+- MTP K=2 KV capacity: **528,230 tokens**.
+- Five-position near-window retrieval, ordered dual-code retrieval, and 512 forced output tokens passed for both profiles.
+- MTP K=2 accepted 534/706 drafted tokens (**75.64%**) during the long-context gate.
+- Claim boundary: functional retrieval and bounded generation, not arbitrary 262K reasoning quality.
+
 ## Reuse and equivalence
 
 `evidence-reuse.json` hashes every imported source and curated destination artifact. `equivalence/summary.json` records clean-image runtime, semantic, long-generation, c1, and c32 regression gates. No duplicate full evaluation was run for the equivalent clean image.

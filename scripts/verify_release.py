@@ -33,6 +33,7 @@ def main() -> int:
     scales = load(run / "evidence/w4a16-input-scale-audit-clean.json")
     semantic = load(run / "equivalence/semantic.json")
     long_generation = load(run / "equivalence/long-generation.json")
+    maxctx = load(run / "max-context.json")
 
     assert reuse["passed"] and all(reuse["checks"].values())
     assert equivalence["passed"] and all(equivalence["checks"].values())
@@ -46,6 +47,18 @@ def main() -> int:
     assert audit["status"] == "PASS" and not audit["failures"]
     assert scales["passed"] and scales["linear_input_scales_loaded"] == 121
     assert semantic["passed"] and long_generation["passed"]
+    assert maxctx["status"] == "pass"
+    assert maxctx["architectural_context_tokens"] == 262144
+    assert maxctx["base_ar"]["validated_context_tokens"] == 262144
+    assert maxctx["mtp_k2"]["validated_context_tokens"] == 262144
+    assert maxctx["base_ar"]["measured_kv_capacity_tokens"] >= 262144
+    assert maxctx["mtp_k2"]["measured_kv_capacity_tokens"] >= 262144
+    assert maxctx["base_ar"]["near_window"]["positions_passed"] == ["begin", "quarter", "middle", "three_quarter", "end"]
+    assert maxctx["mtp_k2"]["near_window"]["positions_passed"] == ["begin", "quarter", "middle", "three_quarter", "end"]
+    assert maxctx["base_ar"]["near_window"]["forced_generation_tokens"] == 512
+    assert maxctx["mtp_k2"]["near_window"]["forced_generation_tokens"] == 512
+    assert 0 < maxctx["mtp_k2"]["acceptance_rate"] <= 1
+    assert maxctx["base_ar"]["added_swap_mib"] == 0 and maxctx["mtp_k2"]["added_swap_mib"] == 0
 
     profile = runtime["profile"]
     assert profile["KV_CACHE_DTYPE"] == "fp8"
@@ -70,7 +83,7 @@ def main() -> int:
     assert [row["concurrency"] for row in rows] == [1, 8, 32]
     assert all(row["repetitions"] == 3 and row["failed"] == 0 for row in rows)
 
-    for item in ("Qwen3.6 35B-A3B", "vLLM 0.25.0", "FP8", "ModelOpt", "FlashInfer", "MTP K=2"):
+    for item in ("Qwen3.6 35B-A3B", "vLLM 0.25.0", "FP8", "ModelOpt", "FlashInfer", "MTP K=2", "262,144 tokens validated", "261,883 tokens"):
         assert item in page, f"HTML missing {item!r}"
     for item in ("NVFP4 Fast", "MARLIN backend selected", "vLLM 0.24"):
         assert item.lower() not in page.lower(), f"HTML contains forbidden value {item!r}"

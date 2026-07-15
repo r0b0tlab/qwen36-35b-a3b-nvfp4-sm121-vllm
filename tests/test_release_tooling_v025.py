@@ -39,6 +39,9 @@ class ReleaseToolingTests(unittest.TestCase):
             "runtime-audit.json",
             "w4a16-input-scale-audit-clean.json",
             "mtp_acceptance_rate",
+            "max-context.json",
+            "architectural_context_tokens",
+            "forced_generation_tokens",
         ):
             self.assertIn(required, verify)
 
@@ -59,9 +62,21 @@ class ReleaseToolingTests(unittest.TestCase):
             "equivalence/summary.json",
             "MANIFEST.sha256",
             "evidence-reuse.json",
+            "max-context.json",
         ):
             self.assertIn(required, generator)
         self.assertNotIn(FORBIDDEN, generator.lower())
+
+    def test_max_context_reproduction_contract(self):
+        launch = source("scripts/launch_max_context.sh")
+        gate = source("scripts/run_max_context_gate.py")
+        evidence = source("benchmarks/runs/qwen36-v025-mtp-20260714/max-context.json")
+        for required in ("KV_CACHE_MEMORY_BYTES:-6G", "MAX_NUM_SEQS:-1", "--kv-cache-memory-bytes"):
+            self.assertIn(required, launch)
+        for required in ("begin", "quarter", "middle", "three_quarter", "end", "dual_code", "forced_512", "/tokenize"):
+            self.assertIn(required, gate)
+        for required in ('"architectural_context_tokens": 262144', '"validated_context_tokens": 262144', '"forced_generation_tokens": 512'):
+            self.assertIn(required, evidence)
 
     def test_raw_durability_is_ignored_and_manifest_excluded(self):
         self.assertIn("durability.jsonl", source(".gitignore"))
